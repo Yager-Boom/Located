@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Click the button to get your coordinates.</p>
+
+<button onclick="getLocation()">Try It</button>
+
+<p id="demo"></p>
+
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
+<script>
+var x = document.getElementById("demo");
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+var lat = position.coords.latitude;
+console.log(lat);
+//經度
+var lon = position.coords.longitude;
+console.log(lon);
+//緯度
+var geocoder = new google.maps.Geocoder();
+// google.maps.LatLng 物件
+var coord = new google.maps.LatLng(lat,lon);
+// 傳入 latLng 資訊至 geocoder.geocode
+geocoder.geocode({'latLng': coord }, function(results, status) {
+  if (status === google.maps.GeocoderStatus.OK) {
+    // 如果有資料就會回傳
+    if (results) {
+    x.innerHTML = "Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude+ 
+    "<br>Location: " + results[0].formatted_address;
+    }
+  }
+  // 經緯度資訊錯誤
+  else {
+    alert("Reverse Geocoding failed because: " + status);
+  }
+});
+
+}
+</script>
+
+</body>
+</html>
